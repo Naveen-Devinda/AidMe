@@ -14,7 +14,7 @@ class Custombutton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.06,
-      width: 50,
+      width: 100,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         color: buttonColor,
@@ -22,7 +22,7 @@ class Custombutton extends StatelessWidget {
       child: Center(
         child: Text(
           buttonName,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         ),
       ),
     );

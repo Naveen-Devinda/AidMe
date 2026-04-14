@@ -1,5 +1,3 @@
-import 'package:aidme/pages/create_acc.dart';
-import 'package:aidme/pages/onboarding_page.dart';
 import 'package:aidme/services/user_services.dart';
 import 'package:aidme/widgets/wrapper.dart';
 import 'package:flutter/material.dart';

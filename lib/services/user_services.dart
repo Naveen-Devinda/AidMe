@@ -33,7 +33,10 @@ class UserServices {
         context,
       ).showSnackBar(SnackBar(content: Text("User details Saved Successful")));
     } catch (err) {
-      err.toString();
+      // show error message to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error saving user details: ${err.toString()}")),
+      );
     }
   }
 
