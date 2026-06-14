@@ -37,6 +37,7 @@ dependencies:
   smooth_page_indicator: ^2.0.1
   shared_preferences: ^2.5.5
   carousel_slider: ^5.1.2
+  video_player: ^2.10.0
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,7 @@ flutter:
   assets:
     - assets/fonts/
     - assets/images/
+    - assets/Video/
 
   fonts:
     - family: Inter

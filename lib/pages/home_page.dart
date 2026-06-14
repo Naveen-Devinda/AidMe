@@ -1,6 +1,6 @@
 import 'package:aidme/constants/colors.dart';
 import 'package:aidme/models/coursel.dart';
-import 'package:aidme/pages/mentalmainpage.dart';
+import 'package:aidme/pages/mental_illness.dart';
 import 'package:aidme/pages/physicalmainpage.dart';
 import 'package:aidme/pages/setting.dart';
 import 'package:aidme/widgets/button2.dart';
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Mentalmainpage(),
+                    builder: (context) => const MentalIllness(),
                   ),
                 );
               },
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SizedBox(height: 20),
-          SizedBox(child: CarouselScreen(), height: 210),
+          SizedBox(height: 210, child: CarouselScreen()),
         ],
       ),
     );
