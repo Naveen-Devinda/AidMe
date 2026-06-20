@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "347698627051",
+    "project_id": "aidme-32597",
+    "storage_bucket": "aidme-32597.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:347698627051:android:d5692b2dd03051c193d9ae",
+        "android_client_info": {
+          "package_name": "com.example.aidme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7byRbR8VbAI-xit7k4ROYk5s8slUQDkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
