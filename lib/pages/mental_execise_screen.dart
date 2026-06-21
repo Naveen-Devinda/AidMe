@@ -1,5 +1,6 @@
 import 'package:aidme/constants/colors.dart';
 import 'package:aidme/pages/execise_details.dart';
+import 'package:aidme/services/recent_activity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -40,6 +41,7 @@ class _MentalExeciseScreenState extends State<MentalExeciseScreen> {
 
   void _nextOrDone() {
     if (_isLastPage) {
+      RecentActivityService.add('Mental - ${widget.illnessTitle}');
       Navigator.pop(context);
       return;
     }

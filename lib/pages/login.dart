@@ -41,9 +41,12 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
 
-      if (!mounted) {
-        return;
+      final profile = await UserServices.fetchUserProfile();
+      if (profile != null) {
+        await UserServices.saveProfileToLocal(profile);
       }
+
+      if (!mounted) return;
 
       Navigator.pushReplacement(
         context,
@@ -67,13 +70,19 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final credential = await UserServices.signInWithGoogle();
-      if (credential == null) {
-        return;
+      if (credential == null) return;
+
+      final profile = await UserServices.fetchUserProfile();
+      if (profile != null) {
+        await UserServices.saveProfileToLocal(profile);
+      } else if (credential.user != null) {
+        await UserServices.updateProfileInFirestore({
+          'name': credential.user!.displayName ?? 'User',
+          'email': credential.user!.email ?? '',
+        });
       }
 
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
 
       Navigator.pushReplacement(
         context,

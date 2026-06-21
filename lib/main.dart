@@ -1,8 +1,10 @@
+import 'package:aidme/providers/theme_provider.dart';
 import 'package:aidme/services/user_services.dart';
 import 'package:aidme/widgets/emergency_toggle_button.dart';
 import 'package:aidme/widgets/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -10,16 +12,19 @@ void main() async {
   await Firebase.initializeApp();
   await SharedPreferences.getInstance();
 
-  // Test කරන්න දාන code එක
   try {
     print("⚡ Firebase එක Connect කරන්න හදන්නේ...");
-    // Firebase App එකේ නම print කරනවා. වැඩ නම් ' [DEFAULT] ' කියලා වැටෙන්න ඕනේ.
     print("🔥 Firebase සාර්ථකව Connect වුනා! App Name: ${Firebase.app().name}");
   } catch (e) {
     print("❌ Firebase Connect වුනේ නැහැ! Error: $e");
   }
 
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -27,17 +32,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
     return FutureBuilder(
       future: UserServices.checkUsername(),
       builder: (context, snapshot) {
-        //IF SNAPSHOT IS STILL WAITING
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else {
           bool hasUserName = snapshot.data ?? false;
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(fontFamily: "Inter"),
+            theme: themeProvider.lightTheme,
+            darkTheme: themeProvider.darkTheme,
+            themeMode: themeProvider.themeMode,
             builder: (context, child) {
               return Stack(
                 children: [

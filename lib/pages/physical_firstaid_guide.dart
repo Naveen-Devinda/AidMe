@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:aidme/constants/colors.dart';
+import 'package:aidme/services/recent_activity_service.dart';
 import 'package:flutter/material.dart';
 
 class PhysicalFirstaidGuide extends StatefulWidget {
@@ -453,8 +454,8 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
                           icon: guide['icon'] as IconData,
                           color: guide['color'] as Color,
                           iconColor: guide['iconColor'] as Color,
-                          onTap: () {
-                            showDialog(
+                          onTap: () async {
+                            await showDialog(
                               context: context,
                               barrierColor: kBlackColor.withValues(alpha: 0.42),
                               builder: (context) {
@@ -475,6 +476,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
                                 );
                               },
                             );
+                            if (mounted) {
+                              RecentActivityService.add(
+                                'Physical - ${guide['title']}',
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Guide completed'),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            }
                           },
                         );
                       },

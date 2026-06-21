@@ -149,6 +149,75 @@ class UserServices {
     return userName != null || _auth.currentUser != null;
   }
 
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> streamUserProfile() {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return const Stream.empty();
+    }
+    return _firestore.collection('users').doc(user.uid).snapshots();
+  }
+
+  static Future<Map<String, dynamic>?> fetchUserProfile() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    final doc = await _firestore.collection('users').doc(user.uid).get();
+    return doc.data();
+  }
+
+  static Future<void> saveProfileToLocal(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', data['name'] ?? '');
+    await prefs.setString('email', data['email'] ?? '');
+    await prefs.setString('gender', data['gender'] ?? '');
+    await prefs.setString('dob', data['dob'] ?? '');
+    await prefs.setString('phone', data['phone'] ?? '');
+    await prefs.setString('bloodGroup', data['bloodGroup'] ?? '');
+    await prefs.setString('height', data['height'] ?? '');
+    await prefs.setString('weight', data['weight'] ?? '');
+    await prefs.setStringList(
+      'chronicDiseases',
+      (data['chronicDiseases'] as List?)?.cast<String>() ?? [],
+    );
+    final contacts = (data['emergencyContacts'] as List?) ?? [];
+    for (var i = 0; i < 3; i++) {
+      final c = i < contacts.length ? contacts[i] as Map? : null;
+      await prefs.setString('emergencyContact${i + 1}Name', c?['name'] ?? '');
+      await prefs.setString('emergencyContact${i + 1}Phone', c?['phone'] ?? '');
+    }
+  }
+
+  static Future<void> updateProfileInFirestore(Map<String, dynamic> data) async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).set(data, SetOptions(merge: true));
+    }
+  }
+
+  static Future<void> changePassword(String currentPassword, String newPassword) async {
+    final user = _auth.currentUser;
+    if (user == null || user.email == null) return;
+    final credential = EmailAuthProvider.credential(
+      email: user.email!,
+      password: currentPassword,
+    );
+    await user.reauthenticateWithCredential(credential);
+    await user.updatePassword(newPassword);
+  }
+
+  static Future<void> deleteAccount(String password) async {
+    final user = _auth.currentUser;
+    if (user == null || user.email == null) return;
+    final credential = EmailAuthProvider.credential(
+      email: user.email!,
+      password: password,
+    );
+    await user.reauthenticateWithCredential(credential);
+    await _firestore.collection('users').doc(user.uid).delete();
+    await user.delete();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
   static Future<void> storeRegistrationProfile({
     required String name,
     required String email,

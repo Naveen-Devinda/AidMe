@@ -3,57 +3,10 @@ import 'package:aidme/models/coursel.dart';
 import 'package:aidme/pages/mental_illness.dart';
 import 'package:aidme/pages/physicalmainpage.dart';
 import 'package:aidme/pages/setting.dart';
+import 'package:aidme/services/recent_activity_service.dart';
 import 'package:aidme/widgets/button2.dart';
 import 'package:flutter/material.dart';
 
-// ---------- Recent Activity Model ----------
-class RecentActivity {
-  final String title;
-  final DateTime timestamp;
-
-  RecentActivity({required this.title, required this.timestamp});
-
-  String get formattedTime {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final yesterday = today.subtract(const Duration(days: 1));
-    final date = DateTime(timestamp.year, timestamp.month, timestamp.day);
-
-    String dateStr;
-    if (date == today) {
-      dateStr = 'Today';
-    } else if (date == yesterday) {
-      dateStr = 'Yesterday';
-    } else {
-      dateStr =
-          '${timestamp.day} ${_monthAbbr(timestamp.month)} ${timestamp.year}';
-    }
-    final hour = timestamp.hour > 12 ? timestamp.hour - 12 : timestamp.hour;
-    final minute = timestamp.minute.toString().padLeft(2, '0');
-    final amPm = timestamp.hour >= 12 ? 'PM' : 'AM';
-    return '$dateStr at $hour:$minute $amPm';
-  }
-
-  String _monthAbbr(int month) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return months[month - 1];
-  }
-}
-
-// ---------- Home Page ----------
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -62,24 +15,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<RecentActivity> _recentActivities = [];
+  List<RecentActivityEntry> _recentActivities = [];
   bool _showRecentActivity = true;
 
-  void _addRecentActivity(String title) {
-    if (_recentActivities.isNotEmpty &&
-        _recentActivities.first.title == title) {
-      return;
-    }
-    setState(() {
-      _recentActivities.insert(
-        0,
-        RecentActivity(title: title, timestamp: DateTime.now()),
-      );
-      if (_recentActivities.length > 5) _recentActivities.removeLast();
-    });
+  @override
+  void initState() {
+    super.initState();
+    _loadActivities();
   }
 
-  // ✅ Clear with confirmation
+  Future<void> _loadActivities() async {
+    final items = await RecentActivityService.load();
+    if (mounted) setState(() => _recentActivities = items);
+  }
+
+  Future<void> _navigateAndReload(Widget page) async {
+    await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+    await _loadActivities();
+  }
+
   void _clearRecentActivity() {
     showDialog(
       context: context,
@@ -96,9 +50,7 @@ class _HomePageState extends State<HomePage> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              setState(() {
-                _recentActivities.clear();
-              });
+              RecentActivityService.clear().then((_) => _loadActivities());
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Clear All'),
@@ -140,13 +92,9 @@ class _HomePageState extends State<HomePage> {
         children: [
           // ---------- Mental First Aid ----------
           GestureDetector(
-            onTap: () {
-              _addRecentActivity('Mental First Aid');
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MentalIllness()),
-              );
-            },
+            onTap: () => _navigateAndReload(
+              const MentalIllness(),
+            ),
             child: Button2(
               buttoName: "Mental FirstAid",
               buttonColor: const Color(0xff3FBBBB),
@@ -159,15 +107,9 @@ class _HomePageState extends State<HomePage> {
 
           // ---------- Physical First Aid ----------
           GestureDetector(
-            onTap: () {
-              _addRecentActivity('Physical First Aid');
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Physicalmainpage(),
-                ),
-              );
-            },
+            onTap: () => _navigateAndReload(
+              const Physicalmainpage(),
+            ),
             child: Button2(
               buttoName: "Physical FirstAid",
               buttonColor: const Color(0xffBB3F3F),
@@ -183,7 +125,8 @@ class _HomePageState extends State<HomePage> {
             height: 180,
             child: CarouselScreen(
               onTipTapped: (tipTitle) {
-                _addRecentActivity(tipTitle);
+                RecentActivityService.add(tipTitle);
+                _loadActivities();
               },
             ),
           ),
@@ -212,7 +155,6 @@ class _HomePageState extends State<HomePage> {
                 color: Color(0xff98A9AA),
               ),
             ),
-            // ✅ Trash icon with confirmation
             IconButton(
               onPressed: _recentActivities.isEmpty
                   ? null
