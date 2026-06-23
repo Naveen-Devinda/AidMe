@@ -676,7 +676,7 @@ class _CreateAccState extends State<CreateAcc> {
                       });
                     },
                     backgroundColor: const Color(0xffFDE3E2),
-                    labelStyle: const TextStyle(fontWeight: FontWeight.w700),
+                    labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                   );
                 }).toList(),
               ),

@@ -309,6 +309,7 @@ class _ExeciseMediaState extends State<_ExeciseMedia> {
                   style: TextStyle(
                     color: Color(0xff3FBBBB),
                     fontWeight: FontWeight.w700,
+                    fontSize: 14,
                   ),
                 ),
               )

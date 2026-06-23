@@ -107,7 +107,7 @@ class ProfileManagementPage extends StatelessWidget {
               const SizedBox(height: 12),
               ...options.map((g) => ListTile(
                 leading: Icon(current == g ? Icons.radio_button_checked : Icons.radio_button_off, color: const Color(0xffE53935)),
-                title: Text(g, style: const TextStyle(fontWeight: FontWeight.w600)),
+                title: Text(g, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                 onTap: () {
                   UserServices.updateProfileInFirestore({'gender': g});
                   Navigator.pop(ctx);
@@ -136,7 +136,7 @@ class ProfileManagementPage extends StatelessWidget {
               const SizedBox(height: 8),
               ...groups.map((g) => ListTile(
                 leading: Icon(current == g ? Icons.radio_button_checked : Icons.radio_button_off, color: const Color(0xffE53935)),
-                title: Text(g, style: const TextStyle(fontWeight: FontWeight.w600)),
+                title: Text(g, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                 onTap: () {
                   UserServices.updateProfileInFirestore({'bloodGroup': g});
                   Navigator.pop(ctx);
@@ -198,7 +198,7 @@ class ProfileManagementPage extends StatelessWidget {
                   Wrap(
                     spacing: 8, runSpacing: 8,
                     children: tempList.map((d) => Chip(
-                      label: Text(d, style: const TextStyle(fontWeight: FontWeight.w600)),
+                      label: Text(d, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
                       deleteIcon: const Icon(Icons.close, size: 18),
                       onDeleted: () => setSheetState(() => tempList.remove(d)),
                       backgroundColor: const Color(0xffFDE3E2),
@@ -219,7 +219,7 @@ class ProfileManagementPage extends StatelessWidget {
                       minimumSize: const Size.fromHeight(48),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text('Save', style: TextStyle(fontWeight: FontWeight.w800)),
+                    child: const Text('Save', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
                   ),
                 ),
               ],
@@ -249,7 +249,7 @@ class ProfileManagementPage extends StatelessWidget {
               CircleAvatar(
                 radius: 16,
                 backgroundColor: const Color(0xffE53935).withValues(alpha: 0.1),
-                child: Text('${i + 1}', style: const TextStyle(fontWeight: FontWeight.w800, color: Color(0xffE53935))),
+                child: Text('${i + 1}', style: const TextStyle(fontWeight: FontWeight.w800, color: Color(0xffE53935), fontSize: 14)),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -257,7 +257,7 @@ class ProfileManagementPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(name.isNotEmpty ? name : 'Not set',
-                        style: TextStyle(fontWeight: FontWeight.w600, color: name.isNotEmpty ? const Color(0xff1A1A1A) : Colors.grey)),
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: name.isNotEmpty ? const Color(0xff1A1A1A) : Colors.grey)),
                     if (phone.isNotEmpty)
                       Text(phone, style: const TextStyle(fontSize: 13, color: Color(0xff6A6A6A))),
                   ],

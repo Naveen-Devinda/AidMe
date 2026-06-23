@@ -55,10 +55,14 @@ class _CarouselScreenState extends State<CarouselScreen> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             "Daily Tips",
-            style: TextStyle(fontSize: 18, color: Colors.black54),
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.black54,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 30),
         // --- Fixed height carousel ---
         SizedBox(
           height:

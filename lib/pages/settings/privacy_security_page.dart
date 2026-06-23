@@ -102,7 +102,7 @@ class _PrivacySecurityPageState extends State<PrivacySecurityPage> {
             children: [
               const Text(
                 'This action is irreversible. All your data will be permanently deleted.',
-                style: TextStyle(fontWeight: FontWeight.w600, color: Colors.red),
+                style: TextStyle(fontWeight: FontWeight.w600, color: Colors.red, fontSize: 14),
               ),
               const SizedBox(height: 16),
               TextField(

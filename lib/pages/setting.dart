@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:aidme/constants/colors.dart';
+import 'package:aidme/pages/history_page.dart';
 import 'package:aidme/pages/login.dart';
 import 'package:aidme/pages/settings/about_page.dart';
 import 'package:aidme/pages/settings/help_feedback_page.dart';
@@ -154,6 +155,19 @@ class _SettingState extends State<Setting> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => const ThemeSettingsPage(),
+                    ),
+                  );
+                },
+              ),
+              _menuItem(
+                Icons.history,
+                'History',
+                'Recent mental & physical sessions',
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const HistoryPage(),
                     ),
                   );
                 },

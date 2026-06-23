@@ -20,7 +20,7 @@ class ThemeSettingsPage extends StatelessWidget {
               SwitchListTile(
                 title: const Text(
                   'Dark Mode',
-                  style: TextStyle(fontWeight: FontWeight.w700),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                 ),
                 subtitle: const Text('Toggle dark/light theme'),
                 value: themeProvider.isDark,
