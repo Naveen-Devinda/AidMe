@@ -13,8 +13,7 @@ class ExeciseDetails {
 }
 
 const String _anxiety_sit = 'assets/Video/sitdown.mp4';
-const String _anxiety_breath =
-    'assets/Video/lung_breathing.mp3'; // Assuming the video file is sitdown.mp4
+const String _breathingVideo = 'https://www.youtube.com/shorts/Cq7nmTw1epA';
 const String _defaultImage = 'assets/images/mainmentalpage.png';
 
 const Map<String, List<ExeciseDetails>> mentalIllnessExecises = {
@@ -30,8 +29,8 @@ const Map<String, List<ExeciseDetails>> mentalIllnessExecises = {
       title: 'Breathing',
       description:
           'Take a slow breath in for 5 seconds, hold for 5 seconds, and breathe out for 5 seconds to help your body relax and feel calmer.',
-      mediaType: 'photo',
-      mediaUrl: _anxiety_breath,
+      mediaType: 'youtube',
+      mediaUrl: _breathingVideo,
     ),
     ExeciseDetails(
       title: 'Muscle exercise',
@@ -117,8 +116,8 @@ const Map<String, List<ExeciseDetails>> mentalIllnessExecises = {
     ExeciseDetails(
       title: 'Slow deep breaths',
       description: 'Breathe out longer than you breathe in',
-      mediaType: 'gif',
-      mediaUrl: _defaultImage,
+      mediaType: 'youtube',
+      mediaUrl: _breathingVideo,
     ),
     ExeciseDetails(
       title: 'Safe sentence',
@@ -137,8 +136,8 @@ const Map<String, List<ExeciseDetails>> mentalIllnessExecises = {
     ExeciseDetails(
       title: 'Sleep breathing',
       description: 'Inhale 4, exhale 6 until relaxed',
-      mediaType: 'video',
-      mediaUrl: _defaultImage,
+      mediaType: 'youtube',
+      mediaUrl: _breathingVideo,
     ),
     ExeciseDetails(
       title: 'Avoid late caffeine/alcohol',

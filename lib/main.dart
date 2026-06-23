@@ -1,3 +1,4 @@
+import 'package:aidme/navigator_key.dart';
 import 'package:aidme/providers/theme_provider.dart';
 import 'package:aidme/services/user_services.dart';
 import 'package:aidme/widgets/emergency_toggle_button.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           bool hasUserName = snapshot.data ?? false;
           return MaterialApp(
             debugShowCheckedModeBanner: false,
+            navigatorKey: navigatorKey,
             theme: themeProvider.lightTheme,
             darkTheme: themeProvider.darkTheme,
             themeMode: themeProvider.themeMode,

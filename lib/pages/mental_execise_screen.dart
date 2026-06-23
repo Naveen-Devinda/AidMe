@@ -2,6 +2,7 @@ import 'package:aidme/constants/colors.dart';
 import 'package:aidme/pages/execise_details.dart';
 import 'package:aidme/services/recent_activity_service.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 class MentalExeciseScreen extends StatefulWidget {
@@ -259,8 +260,42 @@ class _ExeciseMediaState extends State<_ExeciseMedia> {
     super.dispose();
   }
 
+  bool get _isYoutube => widget.execise.mediaType == 'youtube';
+
   @override
   Widget build(BuildContext context) {
+    if (_isYoutube) {
+      return GestureDetector(
+        onTap: () async {
+          final uri = Uri.parse(widget.execise.mediaUrl);
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        },
+        child: Container(
+          width: 230,
+          height: 190,
+          decoration: BoxDecoration(
+            color: const Color(0xff3FBBBB).withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.play_circle_fill, color: Color(0xff3FBBBB), size: 56),
+              SizedBox(height: 8),
+              Text(
+                'Tap to watch',
+                style: TextStyle(
+                  color: Color(0xff3FBBBB),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     if (_isVideo) {
       final controller = _videoController;
 
@@ -334,6 +369,9 @@ class _ExeciseMediaState extends State<_ExeciseMedia> {
   }
 
   IconData _mediaIcon(String mediaType) {
+    if (mediaType == 'youtube') {
+      return Icons.play_circle_fill;
+    }
     if (mediaType == 'music') {
       return Icons.music_note;
     }

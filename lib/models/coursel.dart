@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class CarouselScreen extends StatefulWidget {
-  final Function(String) onTipTapped;
+  final void Function(String)? onTipTapped;
 
-  const CarouselScreen({super.key, required this.onTipTapped});
+  const CarouselScreen({super.key, this.onTipTapped});
 
   @override
   State<CarouselScreen> createState() => _CarouselScreenState();
@@ -75,7 +75,9 @@ class _CarouselScreenState extends State<CarouselScreen> {
                   subtitle: tip["subtitle"],
                   icon: tip["icon"],
                   color: tip["color"],
-                  onTap: () => widget.onTipTapped(tip["title"]),
+                  onTap: widget.onTipTapped != null
+                      ? () => widget.onTipTapped!(tip["title"])
+                      : null,
                 ),
               );
             },
@@ -105,7 +107,7 @@ class TipCard extends StatelessWidget {
   final String subtitle;
   final IconData icon;
   final Color color;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const TipCard({
     super.key,
@@ -113,7 +115,7 @@ class TipCard extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     required this.color,
-    required this.onTap,
+    this.onTap,
   });
 
   @override

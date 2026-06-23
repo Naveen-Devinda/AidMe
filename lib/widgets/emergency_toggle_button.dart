@@ -1,6 +1,9 @@
 import 'package:aidme/constants/colors.dart';
+import 'package:aidme/navigator_key.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyToggleButton extends StatefulWidget {
   const EmergencyToggleButton({super.key});
@@ -11,32 +14,6 @@ class EmergencyToggleButton extends StatefulWidget {
 
 class _EmergencyToggleButtonState extends State<EmergencyToggleButton> {
   bool _isOpen = false;
-  double _x = 0;
-  double _y = 0;
-  bool _loaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _initPosition());
-  }
-
-  Future<void> _initPosition() async {
-    final size = MediaQuery.sizeOf(context);
-    final prefs = await SharedPreferences.getInstance();
-    if (!mounted) return;
-    setState(() {
-      _x = prefs.getDouble('emergency_toggle_x') ?? size.width - 74;
-      _y = prefs.getDouble('emergency_toggle_y') ?? size.height - 80;
-      _loaded = true;
-    });
-  }
-
-  Future<void> _savePosition() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble('emergency_toggle_x', _x);
-    await prefs.setDouble('emergency_toggle_y', _y);
-  }
 
   void _toggleButton() {
     setState(() {
@@ -53,68 +30,175 @@ class _EmergencyToggleButtonState extends State<EmergencyToggleButton> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (!_loaded) return const SizedBox.shrink();
+  Future<void> _callEmergencyContact() async {
+    final prefs = await SharedPreferences.getInstance();
+    final number = prefs.getString('emergencyContact1Phone') ?? '';
+    if (number.isEmpty) {
+      _showMessage('No emergency contact found');
+      return;
+    }
+    final uri = Uri.parse('tel:$number');
+    try {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      _showMessage('Could not launch phone dialer');
+    }
+  }
 
-    final size = MediaQuery.sizeOf(context);
+  Future<void> _shareLocation() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final number = prefs.getString('emergencyContact1Phone') ?? '';
+      if (number.isEmpty) {
+        _showMessage('No emergency contact found');
+        return;
+      }
 
-    return Positioned(
-      left: _x,
-      top: _y,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 220),
-            child: _isOpen
-                ? Column(
-                    key: const ValueKey('emergency-buttons'),
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      _EmergencyOptionButton(
-                        title: 'Call Emergency',
-                        icon: Icons.call,
-                        onTap: () {
-                          _showMessage('Emergency call button clicked');
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      _EmergencyOptionButton(
-                        title: 'Share Location',
-                        icon: Icons.location_on,
-                        onTap: () {
-                          _showMessage('Share my location button clicked');
-                        },
-                      ),
-                      const SizedBox(height: 14),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-          ),
-          GestureDetector(
-            onPanUpdate: (details) {
-              setState(() {
-                _x = (_x + details.delta.dx).clamp(0, size.width - 56);
-                _y = (_y + details.delta.dy).clamp(0, size.height - 56);
-              });
-            },
-            onPanEnd: (_) => _savePosition(),
-            child: FloatingActionButton(
-              heroTag: 'emergency-toggle-button',
-              onPressed: _toggleButton,
-              backgroundColor: const Color(0xffBB3F3F),
-              foregroundColor: kWhiteColor,
-              elevation: 4,
-              shape: const CircleBorder(),
-              child: Icon(
-                _isOpen ? Icons.close : Icons.warning_amber_rounded,
-                size: 30,
-              ),
+      if (!mounted) return;
+
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        _showMessage('Please turn on GPS');
+        return;
+      }
+
+      if (!mounted) return;
+
+      final permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        final granted = await _showDialog(
+          'Location Permission Needed',
+          'We need your location to share it with your emergency contact.'
+          '\n\nTap Allow to continue.',
+          confirmText: 'Allow',
+          cancelText: 'Deny',
+        );
+        if (!granted || !mounted) return;
+
+        final newPermission = await Geolocator.requestPermission();
+        if (newPermission == LocationPermission.denied) return;
+        if (newPermission == LocationPermission.deniedForever) {
+          _showMessage('Location permission permanently denied');
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        _showMessage('Location permission permanently denied');
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition();
+      final mapsUrl =
+          'https://maps.google.com/?q=${position.latitude},${position.longitude}';
+      final smsUri = Uri.parse(
+        'sms:$number?body=I need help! My location: $mapsUrl',
+      );
+      await launchUrl(smsUri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      _showMessage('Could not send location: $e');
+    }
+  }
+
+  Future<bool> _showDialog(
+    String title,
+    String message, {
+    String confirmText = 'OK',
+    String? cancelText,
+  }) async {
+    final result = await showDialog<bool>(
+      context: navigatorKey.currentContext!,
+      builder: (ctx) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          if (cancelText != null)
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(cancelText),
             ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(confirmText),
           ),
         ],
+      ),
+    );
+    return result ?? false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 18,
+      bottom: 24,
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 220),
+              child: _isOpen
+                  ? Column(
+                      key: const ValueKey('emergency-buttons'),
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        _EmergencyOptionButton(
+                          title: 'Call Emergency',
+                          icon: Icons.call,
+                          onTap: _callEmergencyContact,
+                        ),
+                        const SizedBox(height: 12),
+                        _EmergencyOptionButton(
+                          title: 'Share Location',
+                          icon: Icons.location_on,
+                          onTap: _shareLocation,
+                        ),
+                        const SizedBox(height: 14),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            GestureDetector(
+              onTap: _toggleButton,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 76,
+                    height: 76,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: const Color(0xffBB3F3F).withValues(alpha: 0.15),
+                      border: Border.all(
+                        color: const Color(0xffBB3F3F).withValues(alpha: 0.35),
+                        width: 1.5,
+                      ),
+                    ),
+                  ),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: _isOpen
+                        ? const Icon(
+                            Icons.close,
+                            key: ValueKey('close'),
+                            color: Color(0xffBB3F3F),
+                            size: 28,
+                          )
+                        : Image.asset(
+                            'assets/images/emer.png',
+                            key: const ValueKey('emer'),
+                            width: 44,
+                            height: 44,
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

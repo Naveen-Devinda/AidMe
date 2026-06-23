@@ -123,12 +123,7 @@ class _HomePageState extends State<HomePage> {
           // ---------- Carousel ----------
           SizedBox(
             height: 180,
-            child: CarouselScreen(
-              onTipTapped: (tipTitle) {
-                RecentActivityService.add(tipTitle);
-                _loadActivities();
-              },
-            ),
+            child: const CarouselScreen(),
           ),
           const SizedBox(height: 20),
 
