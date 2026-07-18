@@ -2,7 +2,10 @@ import 'dart:ui';
 
 import 'package:aidme/constants/colors.dart';
 import 'package:aidme/services/recent_activity_service.dart';
+import 'package:aidme/services/voice_service.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+import 'package:aidme/widgets/full_screen_media_viewer.dart';
 
 class PhysicalFirstaidGuide extends StatefulWidget {
   const PhysicalFirstaidGuide({super.key});
@@ -34,6 +37,25 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.local_fire_department,
       'color': Color(0xffFFE7B8),
       'iconColor': Color(0xffFF9800),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+        'assets/images/Burns/4.png',
+        'assets/images/Burns/5.png',
+        'assets/images/Burns/6.png',
+      ],
+      'videos': [
+        'assets/Video/Burns.mp4',
+      ],
+      'imageLabels': [
+        'Move away from the heat source immediately',
+        'Cool the burn with running water for 20 minutes',
+        'Remove rings or tight clothing near burn',
+        'Cover burn with a clean cloth or bandage',
+        'Do not burst blisters or apply oils',
+        'Get medical help for large or severe burns',
+      ],
       'steps': [
         'Move away from the heat source.',
         'Cool the burn with cool running water for 20 minutes.',
@@ -59,6 +81,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.air,
       'color': Color(0xffFFD6D6),
       'iconColor': Color(0xffE53935),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Encourage coughing if person is conscious',
+        'Perform back blows between shoulder blades',
+        'Give 5 abdominal thrusts (Heimlich maneuver)',
+      ],
       'steps': [
         'If the person can cough or speak, encourage them to keep coughing.',
         'Stay with them and watch carefully.',
@@ -86,6 +119,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.favorite,
       'color': Color(0xffF8C7DD),
       'iconColor': Color(0xffE91E63),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Check if person responds and call emergency',
+        'Place hands in center of chest and push hard',
+        'Continue compressions until help arrives',
+      ],
       'steps': [
         'Check if the person responds.',
         'Call emergency services.',
@@ -111,6 +155,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.bloodtype,
       'color': Color(0xffF8D2D2),
       'iconColor': Color(0xffD63A3A),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Apply firm direct pressure to the wound',
+        'Raise the injured area above the heart',
+        'Keep pressing until bleeding stops',
+      ],
       'steps': [
         'Stay calm and wear gloves if available.',
         'Apply firm pressure to the wound.',
@@ -136,6 +191,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.healing,
       'color': Color(0xffDCE5EA),
       'iconColor': Color(0xff607D8B),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Keep the injured area still and immobilized',
+        'Apply wrapped ice to reduce swelling',
+        'Support with a splint and seek medical help',
+      ],
       'steps': [
         'Keep the injured area still.',
         'Do not try to straighten the bone.',
@@ -161,6 +227,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.electric_bolt,
       'color': Color(0xffFFF4B8),
       'iconColor': Color(0xffF9A825),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Turn off power source before approaching',
+        'Check breathing and responsiveness',
+        'Start CPR if needed and call emergency',
+      ],
       'steps': [
         'Turn off the power source first.',
         'Do not touch the person until power is off.',
@@ -186,6 +263,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.coronavirus,
       'color': Color(0xffD4F0F4),
       'iconColor': Color(0xff00838F),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Move away from the allergen immediately',
+        'Use epinephrine injector if available',
+        'Monitor breathing and call emergency',
+      ],
       'steps': [
         'Move away from the allergen.',
         'Help the person sit comfortably.',
@@ -211,6 +299,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.airline_seat_flat,
       'color': Color(0xffE0F2F1),
       'iconColor': Color(0xff00897B),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Help the person lie down safely',
+        'Raise their legs slightly for blood flow',
+        'Loosen tight clothing and give fresh air',
+      ],
       'steps': [
         'Help the person lie down.',
         'Raise their legs slightly.',
@@ -236,6 +335,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.wb_sunny,
       'color': Color(0xffFFE4C7),
       'iconColor': Color(0xffF57C00),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Move person to a cool shaded place',
+        'Cool body with wet towels or fan',
+        'Give small sips of water if awake',
+      ],
       'steps': [
         'Move the person to a cool place.',
         'Remove extra clothing.',
@@ -261,6 +371,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.ac_unit,
       'color': Color(0xffD8ECFF),
       'iconColor': Color(0xff1E88E5),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Move person to a warm shelter',
+        'Remove wet clothes and cover with blankets',
+        'Give warm drinks only if fully awake',
+      ],
       'steps': [
         'Move the person to a warm place.',
         'Remove wet clothes carefully.',
@@ -286,6 +407,17 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
       'icon': Icons.warning,
       'color': Color(0xffE8D7F5),
       'iconColor': Color(0xff7B3FB3),
+      'images': [
+        'assets/images/Burns/1.png',
+        'assets/images/Burns/2.png',
+        'assets/images/Burns/3.png',
+      ],
+      'videos': [],
+      'imageLabels': [
+        'Keep person calm and still',
+        'Keep bitten area below heart level',
+        'Go to hospital immediately',
+      ],
       'steps': [
         'Keep the person calm and still.',
         'Keep the bitten area below heart level.',
@@ -455,31 +587,30 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
                           color: guide['color'] as Color,
                           iconColor: guide['iconColor'] as Color,
                           onTap: () async {
-                            await showDialog(
+                            await showModalBottomSheet(
                               context: context,
-                              barrierColor: kBlackColor.withValues(alpha: 0.42),
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
                               builder: (context) {
                                 return _GuidePopupCard(
-                                  title: guide['title'].toString(),
-                                  description: guide['description'].toString(),
-                                  category: guide['category'].toString(),
-                                  icon: guide['icon'] as IconData,
-                                  color: guide['color'] as Color,
-                                  iconColor: guide['iconColor'] as Color,
-                                  steps: List<String>.from(
-                                    guide['steps'] as List,
-                                  ),
-                                  dos: List<String>.from(guide['dos'] as List),
-                                  donts: List<String>.from(
-                                    guide['donts'] as List,
-                                  ),
-                                );
+                                   title: guide['title'].toString(),
+                                   description: guide['description'].toString(),
+                                   category: guide['category'].toString(),
+                                   icon: guide['icon'] as IconData,
+                                   color: guide['color'] as Color,
+                                   iconColor: guide['iconColor'] as Color,
+                                   images: List<String>.from(guide['images'] as List),
+                                   videos: List<String>.from(guide['videos'] as List),
+                                   imageLabels: guide.containsKey('imageLabels') ? List<String>.from(guide['imageLabels'] as List) : const [],
+                                   steps: List<String>.from(guide['steps'] as List),
+                                   dos: List<String>.from(guide['dos'] as List),
+                                   donts: List<String>.from(guide['donts'] as List),
+                                 );
                               },
                             );
+                            await VoiceService.stop();
                             if (mounted) {
-                              RecentActivityService.add(
-                                'Physical - ${guide['title']}',
-                              );
+                              RecentActivityService.add('Physical - ${guide['title']}');
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Guide completed'),
@@ -499,7 +630,7 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
   }
 }
 
-class _GuidePopupCard extends StatelessWidget {
+class _GuidePopupCard extends StatefulWidget {
   final String title;
   final String description;
   final String category;
@@ -509,6 +640,9 @@ class _GuidePopupCard extends StatelessWidget {
   final List<String> steps;
   final List<String> dos;
   final List<String> donts;
+  final List<String> images;
+  final List<String> videos;
+  final List<String> imageLabels;
 
   const _GuidePopupCard({
     required this.title,
@@ -517,20 +651,59 @@ class _GuidePopupCard extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.iconColor,
+    required this.images,
+    required this.videos,
     required this.steps,
     required this.dos,
     required this.donts,
+    this.imageLabels = const [],
   });
+
+  @override
+  State<_GuidePopupCard> createState() => _GuidePopupCardState();
+}
+
+class _GuidePopupCardState extends State<_GuidePopupCard> {
+  late final PageController _imagePageController;
+  late final PageController _videoPageController;
+  late final List<Map<String, String>> _imageItems;
+  late final List<Map<String, String>> _videoItems;
+  final Map<int, VideoPlayerController> _videoControllers = {};
+  int _selectedTab = 0; // 0 = images, 1 = videos
+
+  @override
+  void initState() {
+    super.initState();
+    _imagePageController = PageController();
+    _videoPageController = PageController();
+    _imageItems = widget.images.map((i) => {'type': 'image', 'url': i}).toList();
+    _videoItems = widget.videos.map((v) => {'type': 'video', 'url': v}).toList();
+    for (int i = 0; i < _videoItems.length; i++) {
+      final controller = VideoPlayerController.asset(_videoItems[i]['url']!);
+      controller.initialize().then((_) {
+        if (mounted) setState(() {});
+      });
+      _videoControllers[i] = controller;
+    }
+  }
+
+  @override
+  void dispose() {
+    for (final controller in _videoControllers.values) {
+      controller.dispose();
+    }
+    _imagePageController.dispose();
+    _videoPageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-
-    return Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 28),
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      child: ClipRRect(
+      return Container(
+        // Dialog properties are now handled by the modal bottom sheet.
+        // Using a transparent container to retain the custom blurred UI.
+        child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
@@ -559,10 +732,10 @@ class _GuidePopupCard extends StatelessWidget {
                         height: 56,
                         width: 56,
                         decoration: BoxDecoration(
-                          color: color.withValues(alpha: 0.86),
+                          color: widget.color.withValues(alpha: 0.86),
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: Icon(icon, color: iconColor, size: 30),
+                        child: Icon(widget.icon, color: widget.iconColor, size: 30),
                       ),
                       const SizedBox(width: 14),
                       Expanded(
@@ -570,7 +743,7 @@ class _GuidePopupCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              title,
+                              widget.title,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -584,14 +757,14 @@ class _GuidePopupCard extends StatelessWidget {
                               children: [
                                 Icon(
                                   Icons.local_offer,
-                                  color: iconColor,
+                                  color: widget.iconColor,
                                   size: 15,
                                 ),
                                 const SizedBox(width: 5),
                                 Text(
-                                  category,
+                                  widget.category,
                                   style: TextStyle(
-                                    color: iconColor,
+                                    color: widget.iconColor,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -601,12 +774,34 @@ class _GuidePopupCard extends StatelessWidget {
                           ],
                         ),
                       ),
+                      StatefulBuilder(
+                        builder: (context, setState) {
+                          bool isSpeaking = VoiceService.isPlaying && VoiceService.currentText.startsWith(widget.title);
+                          return IconButton(
+                            tooltip: "Voice Guidance",
+                            onPressed: () async {
+                              if (isSpeaking) {
+                                await VoiceService.stop();
+                              } else {
+                                String readText = "${widget.title}. ${widget.description}. Instructions: ${widget.steps.join('. ')}";
+                                await VoiceService.speak(readText);
+                              }
+                              setState(() {});
+                            },
+                            icon: Icon(
+                              isSpeaking ? Icons.volume_up : Icons.volume_mute,
+                              color: isSpeaking ? const Color(0xff3FBBBB) : kBlackColor.withValues(alpha: 0.62),
+                            ),
+                          );
+                        },
+                      ),
                       IconButton(
                         onPressed: () {
+                          VoiceService.stop();
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.close),
-                        color: kBlackColor.withValues(alpha: 0.62),
+                        color: kBlackColor.withValues(alpha: 0.58),
                       ),
                     ],
                   ),
@@ -618,37 +813,336 @@ class _GuidePopupCard extends StatelessWidget {
                     children: [
                       _GlassInfoTile(
                         icon: Icons.info_outline,
-                        text: description,
-                        accentColor: iconColor,
+                        text: widget.description,
+                        accentColor: widget.iconColor,
                       ),
+                      const SizedBox(height: 14),
+                      if (_imageItems.isNotEmpty || _videoItems.isNotEmpty)
+                          Column(
+                            children: [
+                              // Media tab icons
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (_imageItems.isNotEmpty)
+                                    GestureDetector(
+                                      onTap: () => setState(() => _selectedTab = 0),
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 200),
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          color: _selectedTab == 0
+                                              ? widget.iconColor.withValues(alpha: 0.15)
+                                              : Colors.grey.shade100,
+                                          borderRadius: BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color: _selectedTab == 0 ? widget.iconColor : Colors.grey.shade300,
+                                            width: _selectedTab == 0 ? 2 : 1,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.photo_library, size: 20,
+                                                color: _selectedTab == 0 ? widget.iconColor : Colors.grey),
+                                            const SizedBox(width: 6),
+                                            Text('Images', style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: _selectedTab == 0 ? widget.iconColor : Colors.grey,
+                                                fontSize: 13)),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  if (_imageItems.isNotEmpty && _videoItems.isNotEmpty)
+                                    const SizedBox(width: 12),
+                                  if (_videoItems.isNotEmpty)
+                                    GestureDetector(
+                                      onTap: () => setState(() => _selectedTab = 1),
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 200),
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        decoration: BoxDecoration(
+                                          color: _selectedTab == 1
+                                              ? widget.iconColor.withValues(alpha: 0.15)
+                                              : Colors.grey.shade100,
+                                          borderRadius: BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color: _selectedTab == 1 ? widget.iconColor : Colors.grey.shade300,
+                                            width: _selectedTab == 1 ? 2 : 1,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.play_circle_outline, size: 20,
+                                                color: _selectedTab == 1 ? widget.iconColor : Colors.grey),
+                                            const SizedBox(width: 6),
+                                            Text('Videos', style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: _selectedTab == 1 ? widget.iconColor : Colors.grey,
+                                                fontSize: 13)),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              // Images section
+                              if (_selectedTab == 0 && _imageItems.isNotEmpty)
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 220,
+                                      child: Stack(
+                                        children: [
+                                          PageView.builder(
+                                            controller: _imagePageController,
+                                            itemCount: _imageItems.length,
+                                            itemBuilder: (context, index) {
+                                              final item = _imageItems[index];
+                                              return GestureDetector(
+                                                onTap: () async {
+                                                  await Navigator.of(context).push(MaterialPageRoute(
+                                                    builder: (_) => FullScreenMediaViewer(
+                                                      url: item['url']!,
+                                                      isVideo: false,
+                                                    ),
+                                                  ));
+                                                },
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  child: Image.asset(
+                                                    item['url']!,
+                                                    fit: BoxFit.contain,
+                                                    width: double.infinity,
+                                                    height: 220,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          if (_imageItems.length > 1) ...[
+                                            Positioned(
+                                              left: 8, top: 0, bottom: 0,
+                                              child: Center(
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    if (_imagePageController.hasClients) {
+                                                      _imagePageController.previousPage(
+                                                          duration: const Duration(milliseconds: 300),
+                                                          curve: Curves.easeInOut);
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(4),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.black38,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 16),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              right: 8, top: 0, bottom: 0,
+                                              child: Center(
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    if (_imagePageController.hasClients) {
+                                                      _imagePageController.nextPage(
+                                                          duration: const Duration(milliseconds: 300),
+                                                          curve: Curves.easeInOut);
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(4),
+                                                    decoration: const BoxDecoration(
+                                                      color: Colors.black38,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                    if (widget.imageLabels.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8, left: 4, right: 4),
+                                        child: AnimatedBuilder(
+                                          animation: _imagePageController,
+                                          builder: (context, child) {
+                                            int currentPage = 0;
+                                            try {
+                                              currentPage = _imagePageController.page?.round() ?? 0;
+                                            } catch (_) {}
+                                            if (currentPage < widget.imageLabels.length) {
+                                              return Text(
+                                                widget.imageLabels[currentPage],
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: widget.iconColor,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              );
+                                            }
+                                            return const SizedBox.shrink();
+                                          },
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              // Videos section
+                              if (_selectedTab == 1 && _videoItems.isNotEmpty)
+                                SizedBox(
+                                  height: 220,
+                                  child: Stack(
+                                    children: [
+                                      PageView.builder(
+                                        controller: _videoPageController,
+                                        itemCount: _videoItems.length,
+                                        itemBuilder: (context, index) {
+                                          final controller = _videoControllers[index]!;
+                                          return GestureDetector(
+                                            onTap: () async {
+                                              await Navigator.of(context).push(MaterialPageRoute(
+                                                builder: (_) => FullScreenMediaViewer(
+                                                  url: _videoItems[index]['url']!,
+                                                  isVideo: true,
+                                                  startPosition: controller.value.position,
+                                                ),
+                                              ));
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(12),
+                                              child: controller.value.isInitialized
+                                                  ? Stack(
+                                                      alignment: Alignment.center,
+                                                      children: [
+                                                        AspectRatio(
+                                                          aspectRatio: controller.value.aspectRatio,
+                                                          child: VideoPlayer(controller),
+                                                        ),
+                                                        Positioned(
+                                                          bottom: 8, right: 8,
+                                                          child: GestureDetector(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                if (controller.value.isPlaying) {
+                                                                  controller.pause();
+                                                                } else {
+                                                                  controller.play();
+                                                                }
+                                                              });
+                                                            },
+                                                            child: Container(
+                                                              padding: const EdgeInsets.all(6),
+                                                              decoration: const BoxDecoration(
+                                                                color: Colors.black54,
+                                                                shape: BoxShape.circle,
+                                                              ),
+                                                              child: Icon(
+                                                                controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                                                                color: Colors.white,
+                                                                size: 24,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : const Center(child: CircularProgressIndicator()),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      if (_videoItems.length > 1) ...[
+                                        Positioned(
+                                          left: 8, top: 0, bottom: 0,
+                                          child: Center(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                if (_videoPageController.hasClients) {
+                                                  _videoPageController.previousPage(
+                                                      duration: const Duration(milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                }
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(4),
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.black38,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 16),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 8, top: 0, bottom: 0,
+                                          child: Center(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                if (_videoPageController.hasClients) {
+                                                  _videoPageController.nextPage(
+                                                      duration: const Duration(milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                }
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(4),
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.black38,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
                       const SizedBox(height: 14),
                       _SectionHeader(
                         icon: Icons.format_list_numbered,
                         title: 'Instructions',
-                        color: iconColor,
+                        color: widget.iconColor,
                       ),
                       const SizedBox(height: 10),
-                      ...List.generate(steps.length, (index) {
+                      ...List.generate(widget.steps.length, (index) {
                         return _StepTile(
                           number: index + 1,
-                          text: steps[index],
-                          accentColor: iconColor,
+                          text: widget.steps[index],
+                          accentColor: widget.iconColor,
                         );
                       }),
                       const SizedBox(height: 6),
                       _ActionSection(
                         title: 'Do',
                         icon: Icons.check_circle,
-                        items: dos,
+                        items: widget.dos,
                         color: const Color(0xff2E7D32),
                       ),
                       const SizedBox(height: 12),
                       _ActionSection(
                         title: "Don't",
                         icon: Icons.cancel,
-                        items: donts,
+                        items: widget.donts,
                         color: const Color(0xffC62828),
                       ),
+                      const SizedBox(height: 12),
                     ],
                   ),
                 ),
@@ -660,6 +1154,8 @@ class _GuidePopupCard extends StatelessWidget {
     );
   }
 }
+
+// Duplicate _GuidePopupCard block removed}
 
 class _CategoryButton extends StatelessWidget {
   final String title;

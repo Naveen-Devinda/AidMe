@@ -130,37 +130,29 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffFFF7F7),
+      backgroundColor: const Color(0xffDBF8F2),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          child: Container(
+            padding: const EdgeInsets.all(20),
             child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      height: 128,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  const SizedBox(height: 22),
+                  const SizedBox(height: 30),
                   const Text(
-                    'Login',
-                    textAlign: TextAlign.center,
+                    'Welcome Back',
                     style: TextStyle(
-                      color: kBlackColor,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xff1A1A1A),
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Sign in to continue your AidMe care profile',
-                    textAlign: TextAlign.center,
+                    'Sign in to continue',
                     style: TextStyle(
                       color: kBlackColor.withValues(alpha: 0.62),
                       fontSize: 14,

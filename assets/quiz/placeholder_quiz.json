@@ -1,0 +1,27 @@
+[
+  {
+    "question": "What is the primary step in dealing with a bleeding wound?",
+    "options": ["Apply pressure", "Apply ice", "Elevate limb", "Give water"],
+    "answerIndex": 0
+  },
+  {
+    "question": "How many CPR cycles are recommended before checking pulse?",
+    "options": ["1", "2", "3", "5"],
+    "answerIndex": 2
+  },
+  {
+    "question": "Which symptom indicates a possible heart attack?",
+    "options": ["Sudden headache", "Chest pain", "Sore throat", "Itchy eyes"],
+    "answerIndex": 1
+  },
+  {
+    "question": "What is the correct position for an unconscious person with breathing?",
+    "options": ["Supine", "Recovery position", "Sitting", "Prone"],
+    "answerIndex": 1
+  },
+  {
+    "question": "How long should you press on a bleeding wound before checking?",
+    "options": ["30 seconds", "1 minute", "2 minutes", "5 minutes"],
+    "answerIndex": 0
+  }
+]

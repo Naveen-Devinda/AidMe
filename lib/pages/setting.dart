@@ -219,7 +219,7 @@ class _SettingState extends State<Setting> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: Colors.black.withOpacity(0.06),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -269,6 +269,12 @@ class _SettingState extends State<Setting> {
             ),
           ),
           const SizedBox(width: 16),
+          // Edit button
+          IconButton(
+            icon: const Icon(Icons.edit, color: Color(0xffE53935)),
+            onPressed: _showEditProfileDialog,
+          ),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,11 +293,67 @@ class _SettingState extends State<Setting> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black.withValues(alpha: 0.5),
+                    color: Colors.black.withOpacity(0.5),
                   ),
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  } 
+
+  // Show dialog to edit name and email
+  void _showEditProfileDialog() {
+    final nameController = TextEditingController(text: _name);
+    final emailController = TextEditingController(text: _email);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Edit Profile'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final newName = nameController.text.trim();
+              final newEmail = emailController.text.trim();
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString('username', newName);
+              await prefs.setString('email', newEmail);
+              final user = UserServices.currentUser;
+              if (user != null) {
+                try {
+                  await UserServices.updateProfileInFirestore({
+                    'name': newName,
+                    'email': newEmail,
+                  });
+                } catch (_) {}
+              }
+              setState(() {
+                _name = newName;
+                _email = newEmail;
+              });
+              _msg('Profile updated');
+              Navigator.pop(ctx);
+            },
+            child: const Text('Save'),
           ),
         ],
       ),

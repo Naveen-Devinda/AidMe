@@ -7,17 +7,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aidme/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await NotificationService.init();
   await SharedPreferences.getInstance();
 
+  await Firebase.initializeApp();
+
   try {
-    print("⚡ Firebase එක Connect කරන්න හදන්නේ...");
-    print("🔥 Firebase සාර්ථකව Connect වුනා! App Name: ${Firebase.app().name}");
+    print("🔥 Firebase Connected Successfully! App Name: ${Firebase.app().name}");
   } catch (e) {
-    print("❌ Firebase Connect වුනේ නැහැ! Error: $e");
+    print("❌ Firebase Connection Failed! Error: $e");
   }
 
   runApp(

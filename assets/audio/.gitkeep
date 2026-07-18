@@ -1,0 +1,8 @@
+# Calm game background music (optional)
+#
+# Add these files for offline playback:
+# - calm_ambient.mp3
+# - ocean_calm.mp3
+# - soft_piano.mp3
+#
+# If missing, games fall back to online ambient tracks automatically.

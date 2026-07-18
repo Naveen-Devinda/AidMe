@@ -14,6 +14,30 @@ class EmergencyToggleButton extends StatefulWidget {
 
 class _EmergencyToggleButtonState extends State<EmergencyToggleButton> {
   bool _isOpen = false;
+  double _left = -1;
+  double _top = -1;
+  bool _isLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPosition();
+  }
+
+  Future<void> _loadPosition() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _left = prefs.getDouble('emergency_toggle_left') ?? -1;
+      _top = prefs.getDouble('emergency_toggle_top') ?? -1;
+      _isLoaded = true;
+    });
+  }
+
+  Future<void> _savePosition(double left, double top) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('emergency_toggle_left', left);
+    await prefs.setDouble('emergency_toggle_top', top);
+  }
 
   void _toggleButton() {
     setState(() {
@@ -130,74 +154,99 @@ class _EmergencyToggleButtonState extends State<EmergencyToggleButton> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isLoaded) return const SizedBox.shrink();
+
+    final size = MediaQuery.of(context).size;
+    if (_left == -1 && _top == -1) {
+      _left = size.width - 94; // Default bottom right
+      _top = size.height - 120;
+    }
+
     return Positioned(
-      right: 18,
-      bottom: 24,
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 220),
-              child: _isOpen
-                  ? Column(
-                      key: const ValueKey('emergency-buttons'),
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        _EmergencyOptionButton(
-                          title: 'Call Emergency',
-                          icon: Icons.call,
-                          onTap: _callEmergencyContact,
+      left: _left,
+      top: _top,
+      child: GestureDetector(
+        onPanUpdate: (details) {
+          setState(() {
+            _left += details.delta.dx;
+            _top += details.delta.dy;
+
+            // Bounds checking
+            if (_left < 0) _left = 0;
+            if (_left > size.width - 76) _left = size.width - 76;
+            if (_top < 50) _top = 50;
+            if (_top > size.height - 76) _top = size.height - 76;
+          });
+        },
+        onPanEnd: (details) {
+          _savePosition(_left, _top);
+        },
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                child: _isOpen
+                    ? Column(
+                        key: const ValueKey('emergency-buttons'),
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          _EmergencyOptionButton(
+                            title: 'Call Emergency',
+                            icon: Icons.call,
+                            onTap: _callEmergencyContact,
+                          ),
+                          const SizedBox(height: 12),
+                          _EmergencyOptionButton(
+                            title: 'Share Location',
+                            icon: Icons.location_on,
+                            onTap: _shareLocation,
+                          ),
+                          const SizedBox(height: 14),
+                        ],
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              GestureDetector(
+                onTap: _toggleButton,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 76,
+                      height: 76,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xffBB3F3F).withValues(alpha: 0.15),
+                        border: Border.all(
+                          color: const Color(0xffBB3F3F).withValues(alpha: 0.35),
+                          width: 1.5,
                         ),
-                        const SizedBox(height: 12),
-                        _EmergencyOptionButton(
-                          title: 'Share Location',
-                          icon: Icons.location_on,
-                          onTap: _shareLocation,
-                        ),
-                        const SizedBox(height: 14),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            GestureDetector(
-              onTap: _toggleButton,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 76,
-                    height: 76,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xffBB3F3F).withValues(alpha: 0.15),
-                      border: Border.all(
-                        color: const Color(0xffBB3F3F).withValues(alpha: 0.35),
-                        width: 1.5,
                       ),
                     ),
-                  ),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    child: _isOpen
-                        ? const Icon(
-                            Icons.close,
-                            key: ValueKey('close'),
-                            color: Color(0xffBB3F3F),
-                            size: 28,
-                          )
-                        : Image.asset(
-                            'assets/images/emer.png',
-                            key: const ValueKey('emer'),
-                            width: 44,
-                            height: 44,
-                          ),
-                  ),
-                ],
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: _isOpen
+                          ? const Icon(
+                              Icons.close,
+                              key: ValueKey('close'),
+                              color: Color(0xffBB3F3F),
+                              size: 28,
+                            )
+                          : Image.asset(
+                              'assets/images/emer.png',
+                              key: const ValueKey('emer'),
+                              width: 44,
+                              height: 44,
+                            ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

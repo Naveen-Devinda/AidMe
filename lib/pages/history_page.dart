@@ -77,7 +77,7 @@ class _HistoryPageState extends State<HistoryPage> {
           : ListView.separated(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
               itemCount: _activities.length,
-              separatorBuilder: (_, _i) => const SizedBox(height: 8),
+              separatorBuilder: (_, i) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final activity = _activities[index];
                 return Container(

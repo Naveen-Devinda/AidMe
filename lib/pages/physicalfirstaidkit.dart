@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:aidme/constants/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -272,7 +270,7 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
                 itemCount: _categories.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                separatorBuilder: (_, _) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final category = _categories[index];
                   final isSelected = category == _selectedCategory;
@@ -305,7 +303,7 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
                   : ListView.separated(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                       itemCount: _filteredItems.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 14),
+                      separatorBuilder: (_, _) => const SizedBox(height: 14),
                       itemBuilder: (context, index) {
                         final item = _filteredItems[index];
                         return _KitCard(
@@ -550,137 +548,108 @@ class _KitPopup extends StatelessWidget {
     final size = MediaQuery.sizeOf(context);
 
     return Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 28),
       backgroundColor: Colors.transparent,
-      elevation: 0,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-          child: Container(
-            constraints: BoxConstraints(maxHeight: size.height * 0.82),
+      insetPadding: const EdgeInsets.all(20),
+      child: Stack(
+        children: [
+          // Logo overlay
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.1,
+              child: Image.asset('assets/logo.png', fit: BoxFit.cover),
+            ),
+          ),
+          // Original content container
+          Container(
+            width: size.width,
+            constraints: const BoxConstraints(maxWidth: 500),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: kWhiteColor.withValues(alpha: 0.72),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: kWhiteColor.withValues(alpha: 0.58)),
-              boxShadow: [
-                BoxShadow(
-                  color: kBlackColor.withValues(alpha: 0.18),
-                  blurRadius: 30,
-                  offset: const Offset(0, 18),
-                ),
-              ],
+              color: kWhiteColor.withValues(alpha: 0.85),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: kWhiteColor.withValues(alpha: 0.6)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ----- Header -----
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(18, 16, 12, 12),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 56,
-                        width: 56,
-                        decoration: BoxDecoration(
-                          color: color.withValues(alpha: 0.86),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Icon(icon, color: iconColor, size: 30),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              name,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: kBlackColor,
-                                fontSize: 21,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.local_offer,
-                                  color: iconColor,
-                                  size: 15,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  category,
-                                  style: TextStyle(
-                                    color: iconColor,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 3),
-                            Text(
-                              'Updated: ${_formatDate(lastUpdated)}',
-                              style: TextStyle(
-                                color: kBlackColor.withValues(alpha: 0.4),
-                                fontSize: 11,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
-                        color: kBlackColor.withValues(alpha: 0.62),
-                      ),
-                    ],
+                Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.asset(
+                      'assets/logo.png',
+                      height: 80,
+                      width: 80,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                // ----- Content -----
-                Flexible(
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(18, 4, 18, 18),
-                    shrinkWrap: true,
-                    children: [
-                      _GlassInfoTile(
-                        icon: Icons.info_outline,
-                        text: description,
-                        accentColor: iconColor,
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      if (tips.isNotEmpty) ...[
-                        const SizedBox(height: 14),
-                        _SectionHeader(
-                          icon: Icons.lightbulb_outline,
-                          title: 'Tip',
-                          color: iconColor,
-                        ),
-                        const SizedBox(height: 10),
-                        _TipTile(text: tips, accentColor: iconColor),
-                      ],
-                      const SizedBox(height: 6),
-                      _ActionSection(
-                        title: 'Remember',
-                        icon: Icons.check_circle,
-                        items: const [
-                          'Always check expiry dates.',
-                          'Keep the kit out of children\'s reach.',
-                          'Replace used items promptly.',
+                      child: Icon(icon, color: color, size: 32),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              color: kBlackColor,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            category,
+                            style: TextStyle(
+                              color: color,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ],
-                        color: const Color(0xff2E7D32),
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                _SectionHeader(
+                  icon: Icons.lightbulb,
+                  title: 'Quick Tips',
+                  color: color,
+                ),
+                const SizedBox(height: 12),
+                _TipTile(text: tips, accentColor: color),
+                const SizedBox(height: 16),
+                Text(
+                  description,
+                  style: TextStyle(
+                    color: kBlackColor.withValues(alpha: 0.8),
+                    fontSize: 15,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Center(
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Close', style: TextStyle(fontSize: 16)),
                   ),
                 ),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
