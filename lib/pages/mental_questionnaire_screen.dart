@@ -30,6 +30,30 @@ class _MentalQuestionnaireScreenState
       'description': 'No feelings or emotions',
     },
     {'name': 'Social Anxiety', 'description': 'Fear of people or social groups'},
+    {
+      'name': 'Bipolar Disorder',
+      'description': 'Extreme mood swings from high to low',
+    },
+    {
+      'name': 'OCD',
+      'description': 'Unwanted repetitive thoughts and urges',
+    },
+    {
+      'name': 'PTSD',
+      'description': 'Severe anxiety triggered by past trauma',
+    },
+    {
+      'name': 'Burnout',
+      'description': 'Chronic physical and emotional exhaustion',
+    },
+    {
+      'name': 'Eating Disorders',
+      'description': 'Unhealthy focus on food and body weight',
+    },
+    {
+      'name': 'Grief & Bereavement',
+      'description': 'Intense sorrow after a significant loss',
+    },
   ];
 
   String _getDescription(String illnessName) {
@@ -77,6 +101,18 @@ class _MentalQuestionnaireScreenState
         return 'Stress Disorder';
       case 'insomnia':
         return 'Insomnia';
+      case 'mood_swings':
+        return 'Bipolar Disorder';
+      case 'repetitive':
+        return 'OCD';
+      case 'trauma':
+        return 'PTSD';
+      case 'burnout':
+        return 'Burnout';
+      case 'food_body':
+        return 'Eating Disorders';
+      case 'grief':
+        return 'Grief & Bereavement';
       default:
         return 'Anxiety Disorder';
     }
@@ -189,6 +225,12 @@ class _MentalQuestionnaireScreenState
         {'emoji': '😶', 'label': 'Numb or disconnected', 'value': 'numb'},
         {'emoji': '😫', 'label': 'Stressed or overwhelmed', 'value': 'stressed'},
         {'emoji': '😴', 'label': 'Trouble sleeping', 'value': 'insomnia'},
+        {'emoji': '🎭', 'label': 'Mood swings up and down', 'value': 'mood_swings'},
+        {'emoji': '🔁', 'label': 'Repetitive thoughts or urges', 'value': 'repetitive'},
+        {'emoji': '💔', 'label': 'Haunted by past experiences', 'value': 'trauma'},
+        {'emoji': '🥱', 'label': 'Exhausted and drained', 'value': 'burnout'},
+        {'emoji': '🍽️', 'label': 'Struggling with food or body image', 'value': 'food_body'},
+        {'emoji': '🥀', 'label': 'Grieving a loss', 'value': 'grief'},
       ];
 
   Widget _buildQuestion2() {

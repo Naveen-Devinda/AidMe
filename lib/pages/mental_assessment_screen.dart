@@ -1,6 +1,6 @@
 import 'package:aidme/constants/colors.dart';
 import 'package:aidme/pages/mental_illness.dart';
-import 'package:aidme/pages/mental_questionnaire_screen.dart';
+import 'package:aidme/pages/screening_page.dart';
 import 'package:flutter/material.dart';
 
 class MentalAssessmentScreen extends StatelessWidget {
@@ -68,7 +68,7 @@ class MentalAssessmentScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (_) =>
-                                  const MentalQuestionnaireScreen(),
+                                  const ScreeningPage(),
                             ),
                           ),
                         ),

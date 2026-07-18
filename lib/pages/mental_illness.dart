@@ -25,6 +25,30 @@ class _MentalIllnessState extends State<MentalIllness> {
       'name': 'Social Anxiety',
       'description': 'Fear of people or social groups',
     },
+    {
+      'name': 'Bipolar Disorder',
+      'description': 'Extreme mood swings from high to low',
+    },
+    {
+      'name': 'OCD',
+      'description': 'Unwanted repetitive thoughts and urges',
+    },
+    {
+      'name': 'PTSD',
+      'description': 'Severe anxiety triggered by past trauma',
+    },
+    {
+      'name': 'Burnout',
+      'description': 'Chronic physical and emotional exhaustion',
+    },
+    {
+      'name': 'Eating Disorders',
+      'description': 'Unhealthy focus on food and body weight',
+    },
+    {
+      'name': 'Grief & Bereavement',
+      'description': 'Intense sorrow after a significant loss',
+    },
   ];
 
   List<Map<String, String>> get _filteredIllnesses {
