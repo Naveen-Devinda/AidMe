@@ -346,8 +346,8 @@ class _ScreeningPageState extends State<ScreeningPage> {
           const SizedBox(height: 32),
           _AnswerOption(
             label: 'Yes',
-            isSelected: _screeningAnswers[_screeningStep] == 1,
-            onTap: () => _answerQuestion(1),
+            isSelected: _screeningAnswers[_screeningStep] == 2,
+            onTap: () => _answerQuestion(2),
           ),
           const SizedBox(height: 12),
           _AnswerOption(

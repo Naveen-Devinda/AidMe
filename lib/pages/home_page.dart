@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 1;
   late final List<Widget> _tabs;
 
-  static const Color _navBarBg = Color(0xff1C2B2B);
+  static const Color _navBarBg = Color(0xff1F7A7A);
 
   @override
   void initState() {
