@@ -59,8 +59,6 @@ class _EmergencyButtonState extends State<EmergencyButton> {
         ),
         childWhenDragging: const SizedBox.shrink(),
         onDragEnd: (details) {
-          // Adjust for status bar/app bar if needed, offset.dy is global
-          final RenderBox renderBox = context.findRenderObject() as RenderBox;
           // Ensure it stays within screen bounds roughly
           final size = MediaQuery.of(context).size;
           double newLeft = details.offset.dx;

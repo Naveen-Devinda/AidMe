@@ -1,4 +1,5 @@
 import 'package:aidme/constants/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:aidme/pages/mental_assessment_screen.dart';
 import 'package:aidme/pages/physicalmainpage.dart';
@@ -6,7 +7,7 @@ import 'package:aidme/pages/setting.dart';
 import 'package:aidme/pages/ai_chat_page.dart';
 import 'package:aidme/pages/community_page.dart';
 import 'package:aidme/pages/trackers_page.dart';
-import 'package:aidme/pages/relax_page.dart';
+import 'package:aidme/pages/emergency_services_page.dart';
 import 'package:aidme/pages/daily_games_page.dart';
 import 'package:aidme/widgets/daily_tips_carousel.dart';
 import 'package:aidme/pages/quiz_page.dart';
@@ -22,13 +23,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   late final List<Widget> _tabs;
+
+  static const Color _navBarBg = Color(0xff1C2B2B);
 
   @override
   void initState() {
     super.initState();
     _tabs = [
+      const TrackersPage(isTab: true),
       HomeTab(
         onTabChange: (index) {
           setState(() {
@@ -36,8 +40,6 @@ class _HomePageState extends State<HomePage> {
           });
         },
       ),
-      const TrackersPage(isTab: true),
-      const RelaxPage(isTab: true),
       const ResourcesTab(),
     ];
   }
@@ -45,93 +47,216 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: _currentIndex == 0,
+      canPop: _currentIndex == 1,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           setState(() {
-            _currentIndex = 0;
+            _currentIndex = 1;
           });
         }
       },
       child: Scaffold(
         backgroundColor: const Color(0xffDBF8F2),
-        body: IndexedStack(index: _currentIndex, children: _tabs),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xff3FBBBB).withValues(alpha: 0.12),
-                blurRadius: 20,
-                offset: const Offset(0, -6),
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _tabs,
+        ),
+        bottomNavigationBar: SizedBox(
+          height: 100,
+          child: _buildCustomNavBar(),
+        ),
+      ),
+    );
+  }
+
+  void _onNavTap(int navIndex) {
+    if (navIndex == 0) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const EmergencyServicesPage(),
+        ),
+      );
+    } else if (navIndex == 1) {
+      setState(() => _currentIndex = 0);
+    } else if (navIndex == 2) {
+      setState(() => _currentIndex = 1);
+    } else if (navIndex == 3) {
+      setState(() => _currentIndex = 2);
+    } else if (navIndex == 4) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const Setting()),
+      );
+    }
+  }
+
+  Widget _buildCustomNavBar() {
+    const int centerNavIndex = 2;
+
+    final items = [
+      _NavItem(icon: Icons.emergency_outlined, activeIcon: Icons.emergency, label: 'Emergency', navIndex: 0),
+      _NavItem(icon: Icons.analytics_outlined, activeIcon: Icons.analytics, label: 'Trackers', navIndex: 1),
+      _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home', navIndex: centerNavIndex),
+      _NavItem(icon: Icons.menu_book_outlined, activeIcon: Icons.menu_book, label: 'Resources', navIndex: 3),
+      _NavItem(icon: Icons.settings_outlined, activeIcon: Icons.settings, label: 'Settings', navIndex: 4),
+    ];
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Container(
+        height: 72,
+        decoration: BoxDecoration(
+          color: _navBarBg,
+          borderRadius: BorderRadius.circular(40),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              blurRadius: 20,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: items.map((item) {
+            if (item.navIndex == centerNavIndex) {
+              return _buildCenterButton(item);
+            }
+            return _buildSideButton(item);
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  bool _isNavActive(_NavItem item) {
+    if (item.navIndex == 0) return false;
+    if (item.navIndex == 4) return false;
+    final tabMap = {1: 0, 2: 1, 3: 2};
+    return _currentIndex == tabMap[item.navIndex];
+  }
+
+  Widget _buildCenterButton(_NavItem item) {
+    final isActive = _isNavActive(item);
+    return GestureDetector(
+      onTap: () => _onNavTap(item.navIndex),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 4),
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              color: const Color(0xffBAFCFB),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.transparent,
+                width: 2,
               ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xffF0FDFC), Colors.white],
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xffBAFCFB).withValues(alpha: 0.3),
+                  blurRadius: 14,
+                  spreadRadius: 2,
                 ),
-                border: Border(
-                  top: BorderSide(color: Color(0xff3FBBBB), width: 0.8),
-                ),
-              ),
-              child: BottomNavigationBar(
-                currentIndex: _currentIndex,
-                onTap: (index) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                selectedItemColor: const Color(0xff3FBBBB),
-                unselectedItemColor: const Color(0xff98A9AA),
-                selectedLabelStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-                unselectedLabelStyle: const TextStyle(fontSize: 11),
-                items: const [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home_outlined),
-                    activeIcon: Icon(Icons.home),
-                    label: "Home",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.analytics_outlined),
-                    activeIcon: Icon(Icons.analytics),
-                    label: "Trackers",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.spa_outlined),
-                    activeIcon: Icon(Icons.spa),
-                    label: "Relax",
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.support_agent_outlined),
-                    activeIcon: Icon(Icons.support_agent),
-                    label: "Resources",
-                  ),
-                ],
-              ),
+              ],
+            ),
+            child: Icon(
+              isActive ? item.activeIcon : item.icon,
+              color: const Color(0xff1C2B2B),
+              size: 26,
             ),
           ),
+          const SizedBox(height: 4),
+          Text(
+            item.label,
+            style: TextStyle(
+              color: isActive ? const Color(0xffDBF8F2) : Colors.white54,
+              fontSize: 10,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 4),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSideButton(_NavItem item) {
+    final isActive = _isNavActive(item);
+    return GestureDetector(
+      onTap: () => _onNavTap(item.navIndex),
+      child: SizedBox(
+        width: 56,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            Icon(
+              isActive ? item.activeIcon : item.icon,
+              color: isActive ? const Color(0xffDBF8F2) : Colors.white54,
+              size: 24,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              item.label,
+              style: TextStyle(
+                color: isActive ? const Color(0xffDBF8F2) : Colors.white54,
+                fontSize: 10,
+                fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 4),
+          ],
         ),
       ),
     );
   }
 }
 
+class _NavItem {
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+  final int navIndex;
+
+  const _NavItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+    required this.navIndex,
+  });
+}
+
 // ── HOME TAB CONTENT ────────────────────────────────────────────────────────
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   final Function(int) onTabChange;
   const HomeTab({super.key, required this.onTabChange});
+
+  @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  String _userName = "User";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString("username");
+    if (mounted) {
+      setState(() {
+        _userName = (name != null && name.isNotEmpty) ? name : "User";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,267 +276,218 @@ class HomeTab extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Setting()),
-              );
-            },
-            icon: const Icon(Icons.settings),
-            iconSize: 28,
-            color: const Color(0xff5A7273),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: Text(
+                "Hi, $_userName 👋",
+                style: const TextStyle(
+                  color: Color(0xff5A7273),
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      body: Column(
         children: [
-          // Emergency Header
-          const Text(
-            "Emergency First Aid",
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: Colors.black54,
-            ),
-          ),
-          const SizedBox(height: 12),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Emergency Header
+                  const Text(
+                    "Emergency First Aid",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
 
-          // Mental First Aid Button
-          SizedBox(
-            height: screenHeight * 0.11,
-            child: GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const MentalAssessmentScreen(),
-                ),
+                  // Mental First Aid Button
+                  SizedBox(
+                    height: screenHeight * 0.11,
+                    child: GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MentalAssessmentScreen(),
+                        ),
+                      ),
+                      child: Button2(
+                        buttoName: "Mental FirstAid",
+                        buttonColor: const Color(0xff3FBBBB),
+                        fontSize: 20,
+                        fontColor: kWhiteColor,
+                        imageUrl: 'assets/images/icons8-brain-64.png',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Physical First Aid Button
+                  SizedBox(
+                    height: screenHeight * 0.11,
+                    child: GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const Physicalmainpage()),
+                      ),
+                      child: Button2(
+                        buttoName: "Physical FirstAid",
+                        buttonColor: const Color(0xffBB3F3F),
+                        fontSize: 20,
+                        fontColor: kWhiteColor,
+                        imageUrl: 'assets/images/icons8-plus-50.png',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Wellness Dashboard Section Title
+                  const Text(
+                    "AI & Community",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Two Cards: AI Chat + Community
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildQuickCard(
+                          context,
+                          title: "Ask AidMe AI",
+                          subtitle: "Get instant support & tips",
+                          icon: Icons.smart_toy,
+                          color: const Color(0xff3FBBBB),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const AIChatPage()),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildQuickCard(
+                          context,
+                          title: "Community",
+                          subtitle: "Connect & share experiences",
+                          icon: Icons.people,
+                          color: Colors.blue,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const CommunityPage()),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Daily Tips
+                  const Text(
+                    "Daily Tips",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(height: 180, child: const DailyTipsCarousel()),
+                  const SizedBox(height: 24),
+                ],
               ),
-              child: Button2(
-                buttoName: "Mental FirstAid",
-                buttonColor: const Color(0xff3FBBBB),
-                fontSize: 20,
-                fontColor: kWhiteColor,
-                imageUrl: 'assets/images/icons8-brain-64.png',
-              ),
             ),
           ),
-          const SizedBox(height: 12),
-
-          // Physical First Aid Button
-          SizedBox(
-            height: screenHeight * 0.11,
-            child: GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const Physicalmainpage()),
-              ),
-              child: Button2(
-                buttoName: "Physical FirstAid",
-                buttonColor: const Color(0xffBB3F3F),
-                fontSize: 20,
-                fontColor: kWhiteColor,
-                imageUrl: 'assets/images/icons8-plus-50.png',
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Wellness Dashboard Section Title
-          const Text(
-            "Wellness & Trackers",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black54,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          // Grid of Health & Wellness Cards
-          _buildDashboardGrid(context),
-
-          const SizedBox(height: 24),
-
-          // Carousel (Daily Tips)
-          const Text(
-            "Daily Tips",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black54,
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(height: 180, child: const DailyTipsCarousel()),
-          const SizedBox(height: 24),
         ],
       ),
     );
   }
 
-  Widget _buildDashboardGrid(BuildContext context) {
-    final List<Map<String, dynamic>> dashboardItems = [
-      {
-        "title": "Health Trackers",
-        "subtitle": "Mood, Sleep, Water, Exercise",
-        "icon": Icons.analytics,
-        "color": const Color(0xff3FBBBB),
-        "onTap": () {
-          // Open Trackers Page directly
-          onTabChange(1); // switch tab in main navigation shell
-        },
-      },
-      {
-        "title": "Relax & Breathe",
-        "subtitle": "5 Calming breathing exercises",
-        "icon": Icons.spa,
-        "color": Colors.teal,
-        "onTap": () {
-          onTabChange(2); // switch tab to relax
-        },
-      },
-      {
-        "title": "First Aid Quiz",
-        "subtitle": "Test emergency knowledge",
-        "icon": Icons.assignment,
-        "color": Colors.orange,
-        "onTap": () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const QuizPage()),
-          );
-        },
-      },
-      {
-        "title": "Reminders",
-        "subtitle": "Routine hydration & sleep alerts",
-        "icon": Icons.alarm,
-        "color": Colors.purple,
-        "onTap": () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const RemindersPage()),
-          );
-        },
-      },
-      {
-        "title": "Ask AidMe AI",
-        "subtitle": "Get instant support & tips",
-        "icon": Icons.smart_toy,
-        "color": const Color(0xff3FBBBB),
-        "onTap": () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AIChatPage()),
-          );
-        },
-      },
-      {
-        "title": "Community",
-        "subtitle": "Connect & share experiences",
-        "icon": Icons.people,
-        "color": Colors.blue,
-        "onTap": () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CommunityPage()),
-          );
-        },
-      },
-      {
-        "title": "Daily Games",
-        "subtitle": "Play to relax & earn points",
-        "icon": Icons.videogame_asset,
-        "color": Colors.pinkAccent,
-        "onTap": () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const DailyGamesPage()),
-          );
-        },
-      },
-    ];
-
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 0.9,
-      ),
-      itemCount: dashboardItems.length,
-      itemBuilder: (context, index) {
-        final item = dashboardItems[index];
-        return GestureDetector(
-          onTap: item["onTap"],
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.white.withValues(alpha: 0.9),
-                  Colors.white.withValues(alpha: 0.7),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.5),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: item["color"].withValues(alpha: 0.2),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: item["color"].withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(item["icon"], color: item["color"], size: 32),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    item["title"],
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 14,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    item["subtitle"],
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 11,
-                      height: 1.2,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+  Widget _buildQuickCard(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.white.withValues(alpha: 0.9),
+              Colors.white.withValues(alpha: 0.7),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        );
-      },
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.5),
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.2),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 28),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 13,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontSize: 10,
+                height: 1.2,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -440,11 +516,74 @@ class ResourcesTab extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         children: [
           const Text(
-            "Emergency Chat & Community",
+            "Health & Wellness",
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
               color: Colors.black54,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Health Trackers
+          WellnessCard(
+            title: "Health Trackers",
+            subtitle: "Mood, Sleep, Water, Exercise tracking",
+            icon: Icons.analytics,
+            iconColor: const Color(0xff3FBBBB),
+            backgroundColor: Colors.white,
+            onTap: () {},
+          ),
+          const SizedBox(height: 16),
+
+          // Reminders
+          WellnessCard(
+            title: "Reminders & Alerts",
+            subtitle: "Routine hydration & sleep alerts",
+            icon: Icons.alarm,
+            iconColor: Colors.purple,
+            backgroundColor: Colors.white,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const RemindersPage()),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Daily Games
+          WellnessCard(
+            title: "Daily Games",
+            subtitle: "Play to relax & earn points",
+            icon: Icons.videogame_asset,
+            iconColor: Colors.pinkAccent,
+            backgroundColor: Colors.white,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const DailyGamesPage()),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          const Text(
+            "Emergency & Learning",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black54,
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // First Aid Quiz
+          WellnessCard(
+            title: "First Aid Quiz",
+            subtitle: "Test emergency response knowledge",
+            icon: Icons.assignment_outlined,
+            iconColor: Colors.orange,
+            backgroundColor: Colors.white,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const QuizPage()),
             ),
           ),
           const SizedBox(height: 16),
@@ -463,20 +602,6 @@ class ResourcesTab extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // First Aid Quiz
-          WellnessCard(
-            title: "First Aid Quiz",
-            subtitle: "Test and improve your emergency response knowledge",
-            icon: Icons.assignment_outlined,
-            iconColor: Colors.orange,
-            backgroundColor: Colors.white,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const QuizPage()),
-            ),
-          ),
-          const SizedBox(height: 16),
-
           // Community Board
           WellnessCard(
             title: "Community Forum",
@@ -487,20 +612,6 @@ class ResourcesTab extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const CommunityPage()),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Health Reminders
-          WellnessCard(
-            title: "Reminders & Alerts",
-            subtitle: "Configure hydration and lifestyle logs",
-            icon: Icons.alarm_on,
-            iconColor: Colors.purple,
-            backgroundColor: Colors.white,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const RemindersPage()),
             ),
           ),
         ],

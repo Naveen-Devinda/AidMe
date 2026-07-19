@@ -13,7 +13,7 @@ class _RewardsPageState extends State<RewardsPage> {
   int _streak = 0;
   int _points = 0;
   bool _firstStep = false;
-  bool _7DayStreak = false;
+  bool _sevenDayStreak = false;
   bool _stressFree = false;
   bool _healthyWeek = false;
 
@@ -29,7 +29,7 @@ class _RewardsPageState extends State<RewardsPage> {
       _streak = data["streak"] ?? 0;
       _points = data["total_points"] ?? 0;
       _firstStep = data["achievement_first_step"] ?? false;
-      _7DayStreak = data["achievement_7day_streak"] ?? false;
+      _sevenDayStreak = data["achievement_7day_streak"] ?? false;
       _stressFree = data["achievement_stress_free_day"] ?? false;
       _healthyWeek = data["achievement_healthy_week"] ?? false;
     });
@@ -162,7 +162,7 @@ class _RewardsPageState extends State<RewardsPage> {
             "7-Day Warrior",
             "Maintained a 7-day streak",
             Icons.workspace_premium,
-            _7DayStreak,
+            _sevenDayStreak,
           ),
           _buildBadge(
             "Zen Master",
