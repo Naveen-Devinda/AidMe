@@ -63,6 +63,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'iconColor': Color(0xffFF9800),
       'lastUpdated': '2026-06-18',
       'tips': 'Change daily or when wet. Use larger sizes for bigger scrapes.',
+      'images': [
+        'assets/images/first_aid_kits/Adhesive_Bandages.png',
+      ],
     },
     {
       'name': 'Sterile Gauze Pads & Tape',
@@ -74,6 +77,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'iconColor': Color(0xff607D8B),
       'lastUpdated': '2026-06-15',
       'tips': 'Secure with tape without pressing directly on the wound.',
+      'images': [
+        'assets/images/first_aid_kits/Sterile Gauze Pads & Tape.jpg',
+      ],
     },
     {
       'name': 'Antiseptic Wipes & Ointment',
@@ -86,6 +92,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'lastUpdated': '2026-06-12',
       'tips':
           'Use wipes to clean around the wound, then apply a thin layer of ointment.',
+      'images': [
+        'assets/images/first_aid_kits/Antiseptic Wipes & Ointment.png',
+      ],
     },
     {
       'name': 'Pain Relievers',
@@ -98,6 +107,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'lastUpdated': '2026-06-10',
       'tips':
           'Follow dosage instructions. Do not exceed recommended daily dose.',
+      'images': [
+        'assets/images/first_aid_kits/Pain Relievers.jpg',
+      ],
     },
     {
       'name': 'Scissors & Tweezers',
@@ -110,6 +122,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'lastUpdated': '2026-06-08',
       'tips':
           'Sterilise with alcohol before use. Use tweezers to grasp splinters close to the skin.',
+      'images': [
+        'assets/images/first_aid_kits/Scissors & Tweezers.jpg',
+      ],
     },
     {
       'name': 'Disposable Gloves',
@@ -121,6 +136,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'iconColor': Color(0xff00897B),
       'lastUpdated': '2026-06-14',
       'tips': 'Always wear when dealing with blood or bodily fluids.',
+      'images': [
+        'assets/images/first_aid_kits/Disposable gloves.jpg',
+      ],
     },
     {
       'name': 'Instant Cold Pack',
@@ -132,6 +150,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'iconColor': Color(0xff1E88E5),
       'lastUpdated': '2026-06-09',
       'tips': 'Wrap in a cloth before applying to skin. Use for 15‑20 minutes.',
+      'images': [
+        'assets/images/first_aid_kits/Instant Cold Packs.webp',
+      ],
     },
     {
       'name': 'CPR Mask',
@@ -144,6 +165,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'lastUpdated': '2026-06-07',
       'tips':
           'Place the mask over the victim\'s mouth and nose; seal properly.',
+      'images': [
+        'assets/images/first_aid_kits/CPR Mask.jpg',
+      ],
     },
     {
       'name': 'Emergency Blanket',
@@ -155,6 +179,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'iconColor': Color(0xffF57C00),
       'lastUpdated': '2026-06-13',
       'tips': 'Wrap the person completely, reflecting heat back to the body.',
+      'images': [
+        'assets/images/first_aid_kits/emergency-blanket.jpg',
+      ],
     },
     {
       'name': 'First Aid Manual',
@@ -166,6 +193,9 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
       'iconColor': Color(0xff607D8B),
       'lastUpdated': '2026-06-16',
       'tips': 'Keep it accessible and familiarise yourself with the content.',
+      'images': [
+        'assets/images/first_aid_kits/first-aid-manual.jpg',
+      ],
     },
   ];
 
@@ -319,16 +349,17 @@ class _PhysicalFirstAidKitState extends State<PhysicalFirstAidKit> {
                             showDialog(
                               context: context,
                               barrierColor: kBlackColor.withValues(alpha: 0.42),
-                              builder: (_) => _KitPopup(
-                                name: item['name'].toString(),
-                                description: item['description'].toString(),
-                                category: item['category'].toString(),
-                                icon: item['icon'] as IconData,
-                                color: item['color'] as Color,
-                                iconColor: item['iconColor'] as Color,
-                                lastUpdated: item['lastUpdated'].toString(),
-                                tips: item['tips']?.toString() ?? '',
-                              ),
+                               builder: (_) => _KitPopup(
+                                 name: item['name'].toString(),
+                                 description: item['description'].toString(),
+                                 category: item['category'].toString(),
+                                 icon: item['icon'] as IconData,
+                                 color: item['color'] as Color,
+                                 iconColor: item['iconColor'] as Color,
+                                 lastUpdated: item['lastUpdated'].toString(),
+                                 tips: item['tips']?.toString() ?? '',
+                                 images: item.containsKey('images') ? List<String>.from(item['images'] as List) : const [],
+                               ),
                             );
                           },
                         );
@@ -531,6 +562,7 @@ class _KitPopup extends StatelessWidget {
   final Color iconColor;
   final String lastUpdated;
   final String tips;
+  final List<String> images;
 
   const _KitPopup({
     required this.name,
@@ -541,6 +573,7 @@ class _KitPopup extends StatelessWidget {
     required this.iconColor,
     required this.lastUpdated,
     required this.tips,
+    this.images = const [],
   });
 
   @override
@@ -556,7 +589,7 @@ class _KitPopup extends StatelessWidget {
           Positioned.fill(
             child: Opacity(
               opacity: 0.1,
-              child: Image.asset('assets/logo.png', fit: BoxFit.cover),
+              child: Image.asset('assets/images/logo.png', fit: BoxFit.cover),
             ),
           ),
           // Original content container
@@ -569,84 +602,93 @@ class _KitPopup extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: kWhiteColor.withValues(alpha: 0.6)),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.asset(
-                      'assets/logo.png',
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: color.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Icon(icon, color: color, size: 32),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            style: const TextStyle(
-                              color: kBlackColor,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: images.isNotEmpty
+                          ? Image.asset(
+                              images.first,
+                              height: 220,
+                              width: double.infinity,
+                              fit: BoxFit.contain,
+                            )
+                          : Image.asset(
+                              'assets/images/logo.png',
+                              height: 80,
+                              width: 80,
+                              fit: BoxFit.cover,
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            category,
-                            style: TextStyle(
-                              color: color,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                _SectionHeader(
-                  icon: Icons.lightbulb,
-                  title: 'Quick Tips',
-                  color: color,
-                ),
-                const SizedBox(height: 12),
-                _TipTile(text: tips, accentColor: color),
-                const SizedBox(height: 16),
-                Text(
-                  description,
-                  style: TextStyle(
-                    color: kBlackColor.withValues(alpha: 0.8),
-                    fontSize: 15,
-                    height: 1.5,
                   ),
-                ),
-                const SizedBox(height: 24),
-                Center(
-                  child: TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Close', style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: color.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(icon, color: color, size: 32),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              name,
+                              style: const TextStyle(
+                                color: kBlackColor,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              category,
+                              style: TextStyle(
+                                color: color,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  _SectionHeader(
+                    icon: Icons.lightbulb,
+                    title: 'Quick Tips',
+                    color: color,
+                  ),
+                  const SizedBox(height: 12),
+                  _TipTile(text: tips, accentColor: color),
+                  const SizedBox(height: 16),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      color: kBlackColor.withValues(alpha: 0.8),
+                      fontSize: 15,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Close', style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

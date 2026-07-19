@@ -84,6 +84,17 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/images/Burns/
+    - assets/images/choking/
+    - assets/images/cpr/
+    - assets/images/Severe-Bleeding/
+    - assets/images/fracture/
+    - assets/images/Electric-Shock/
+    - assets/images/fainting/
+    - assets/images/Heatstroke/
+    - assets/images/hypothermia/
+    - assets/images/allergic reaction/
+    - assets/images/snake bite/
+    - assets/images/first_aid_kits/
     - assets/Video/
     - assets/quiz/
 
