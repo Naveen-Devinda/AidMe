@@ -198,6 +198,7 @@ class _RemindersPageState extends State<RemindersPage> {
                   _customReminders.add(newReminder);
                 });
                 await WellnessService.saveCustomReminders(_customReminders);
+                if (!ctx.mounted) return;
                 Navigator.of(ctx).pop();
                 _showSnack('Custom reminder added');
               },
@@ -377,7 +378,7 @@ class _RemindersPageState extends State<RemindersPage> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: const Color(0xffD8EEEE)),
                     ),

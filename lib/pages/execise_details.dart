@@ -12,7 +12,7 @@ class ExeciseDetails {
   });
 }
 
-const String _anxiety_sit = 'assets/Video/sitdown.mp4';
+const String _anxietySit = 'assets/Video/sitdown.mp4';
 const String _breathingVideo = 'https://www.youtube.com/shorts/Cq7nmTw1epA';
 const String _defaultImage = 'assets/images/mainmentalpage.png';
 
@@ -23,7 +23,7 @@ const Map<String, List<ExeciseDetails>> mentalIllnessExecises = {
       description:
           'Sit somewhere quiet and comfortable where you feel safe. Keep your body relaxed, feel your feet on the ground, and focus on being calm and still for a moment.',
       mediaType: 'video',
-      mediaUrl: _anxiety_sit,
+      mediaUrl: _anxietySit,
     ),
     ExeciseDetails(
       title: 'Breathing',
@@ -324,7 +324,7 @@ const Map<String, List<ExeciseDetails>> mentalIllnessExecises = {
       description:
           'Close your eyes and picture a place where you feel completely safe and calm. Stay there for one minute.',
       mediaType: 'video',
-      mediaUrl: _anxiety_sit,
+      mediaUrl: _anxietySit,
     ),
   ],
   'Burnout': [

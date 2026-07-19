@@ -17,13 +17,9 @@ void main() async {
   await Firebase.initializeApp();
 
   try {
-<<<<<<< Updated upstream
-=======
-    await Firebase.initializeApp();
->>>>>>> Stashed changes
-    print("🔥 Firebase Connected Successfully! App Name: ${Firebase.app().name}");
+    debugPrint("🔥 Firebase Connected Successfully! App Name: ${Firebase.app().name}");
   } catch (e) {
-    print("❌ Firebase Connection Failed! Error: $e");
+    debugPrint("❌ Firebase Connection Failed! Error: $e");
   }
 
   runApp(

@@ -22,32 +22,35 @@ class WellnessService {
     double moodPoints = 70;
     if (mood == "Happy") {
       moodPoints = 100;
-    } else if (mood == "Calm")
+    } else if (mood == "Calm") {
       moodPoints = 90;
-    else if (mood == "Tired")
+    } else if (mood == "Tired") {
       moodPoints = 50;
-    else if (mood == "Sad")
+    } else if (mood == "Sad") {
       moodPoints = 40;
-    else if (mood == "Stressed")
+    } else if (mood == "Stressed") {
       moodPoints = 30;
+    }
 
     double stressPoints = 50;
     if (stressLevel == "Low") {
       stressPoints = 100;
-    } else if (stressLevel == "Medium")
+    } else if (stressLevel == "Medium") {
       stressPoints = 65;
-    else if (stressLevel == "High")
+    } else if (stressLevel == "High") {
       stressPoints = 30;
+    }
 
     double sleepMentalPoints = 50;
     if (sleepHours >= 7 && sleepHours <= 9) {
       sleepMentalPoints = 100;
-    } else if (sleepHours >= 6)
+    } else if (sleepHours >= 6) {
       sleepMentalPoints = 80;
-    else if (sleepHours > 4)
+    } else if (sleepHours > 4) {
       sleepMentalPoints = 50;
-    else
+    } else {
       sleepMentalPoints = 20;
+    }
 
     double screenTimePoints = 100 - (screenTimeHours * 10).clamp(0, 70);
 
@@ -67,10 +70,11 @@ class WellnessService {
     double foodPoints = 50;
     if (eatingHabit == "Healthy") {
       foodPoints = 100;
-    } else if (eatingHabit == "Average")
+    } else if (eatingHabit == "Average") {
       foodPoints = 70;
-    else if (eatingHabit == "Junk")
+    } else if (eatingHabit == "Junk") {
       foodPoints = 30;
+    }
 
     double physicalScore =
         (waterPoints * 0.3) +

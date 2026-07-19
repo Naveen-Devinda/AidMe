@@ -219,7 +219,7 @@ class _SettingState extends State<Setting> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -293,7 +293,7 @@ class _SettingState extends State<Setting> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                   ),
                 ),
               ],
@@ -351,6 +351,7 @@ class _SettingState extends State<Setting> {
                 _email = newEmail;
               });
               _msg('Profile updated');
+              if (!ctx.mounted) return;
               Navigator.pop(ctx);
             },
             child: const Text('Save'),

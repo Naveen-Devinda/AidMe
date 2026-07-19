@@ -53,6 +53,8 @@ dependencies:
   geolocator: ^14.0.2
   http: ^1.2.1
   flutter_tts: ^4.1.0
+  uuid: ^4.5.1
+  timezone: ^0.9.4
 
 dev_dependencies:
   flutter_test:
@@ -123,7 +125,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes

@@ -609,15 +609,14 @@ class _PhysicalFirstaidGuideState extends State<PhysicalFirstaidGuide> {
                               },
                             );
                             await VoiceService.stop();
-                            if (mounted) {
-                              RecentActivityService.add('Physical - ${guide['title']}');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Guide completed'),
-                                  duration: Duration(seconds: 3),
-                                ),
-                              );
-                            }
+                            if (!context.mounted) return;
+                            RecentActivityService.add('Physical - ${guide['title']}');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Guide completed'),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
                           },
                         );
                       },
@@ -700,10 +699,7 @@ class _GuidePopupCardState extends State<_GuidePopupCard> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-      return Container(
-        // Dialog properties are now handled by the modal bottom sheet.
-        // Using a transparent container to retain the custom blurred UI.
-        child: ClipRRect(
+    return ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
@@ -1150,12 +1146,9 @@ class _GuidePopupCardState extends State<_GuidePopupCard> {
             ),
           ),
         ),
-      ),
     );
   }
 }
-
-// Duplicate _GuidePopupCard block removed}
 
 class _CategoryButton extends StatelessWidget {
   final String title;

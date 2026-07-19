@@ -67,6 +67,7 @@ class ProfileManagementPage extends StatelessWidget {
               final v = controller.text.trim();
               if (v.isEmpty) return;
               await UserServices.updateProfileInFirestore({field: v});
+              if (!c.mounted) return;
               _snack(c, 'Updated successfully');
               if (ctx.mounted) Navigator.pop(ctx);
             },
@@ -88,6 +89,7 @@ class ProfileManagementPage extends StatelessWidget {
     );
     if (picked != null) {
       await UserServices.updateProfileInFirestore({'dob': '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}'});
+      if (!c.mounted) return;
       _snack(c, 'Updated successfully');
     }
   }
@@ -211,6 +213,7 @@ class ProfileManagementPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       await UserServices.updateProfileInFirestore({'chronicDiseases': tempList});
+                      if (!c.mounted) return;
                       _snack(c, 'Updated successfully');
                       if (ctx.mounted) Navigator.pop(ctx);
                     },
@@ -302,6 +305,7 @@ class ProfileManagementPage extends StatelessWidget {
             onPressed: () async {
               contacts[index] = {'name': nameCtrl.text.trim(), 'phone': phoneCtrl.text.trim()};
               await UserServices.updateProfileInFirestore({'emergencyContacts': contacts});
+              if (!c.mounted) return;
               _snack(c, 'Updated successfully');
               if (ctx.mounted) Navigator.pop(ctx);
             },

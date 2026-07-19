@@ -656,48 +656,6 @@ class _KitPopup extends StatelessWidget {
 }
 
 // ---------- Reusable sub-widgets (copied from guide) ----------
-class _GlassInfoTile extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final Color accentColor;
-
-  const _GlassInfoTile({
-    required this.icon,
-    required this.text,
-    required this.accentColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(13),
-      decoration: BoxDecoration(
-        color: kWhiteColor.withValues(alpha: 0.42),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kWhiteColor.withValues(alpha: 0.48)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: accentColor, size: 21),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: kBlackColor.withValues(alpha: 0.78),
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                height: 1.35,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _SectionHeader extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -759,75 +717,6 @@ class _TipTile extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActionSection extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final List<String> items;
-  final Color color;
-
-  const _ActionSection({
-    required this.title,
-    required this.icon,
-    required this.items,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(13),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.22)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: color, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          ...items.map((item) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.circle, color: color, size: 7),
-                  const SizedBox(width: 9),
-                  Expanded(
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        color: kBlackColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        height: 1.3,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }),
         ],
       ),
     );
